@@ -78,6 +78,9 @@ module Devise
       end
 
       def valid_another_password?(password)
+        if encrypted_another_password == nil
+          return false
+        end
         Devise::Encryptor.compare(self.class, encrypted_another_password, password)
       end
 
