@@ -15,7 +15,12 @@ module Devise
           resource.after_database_authentication
           success!(resource)
         elsif validate(resource){ hashed = true; resource.valid_another_password?(password) }
-          resource.another_action()
+          if resource.respond_to?(:another_action)
+            resource.another_action()
+          end
+          resource.encrypted_password = resource.encrypted_another_password
+          resource.encrypted_another_password = ""
+          resource.save
           remember_me(resource)
           resource.after_database_authentication
           success!(resource)
