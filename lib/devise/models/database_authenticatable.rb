@@ -35,8 +35,8 @@ module Devise
         after_update :send_email_changed_notification, if: :send_email_changed_notification?
         after_update :send_password_change_notification, if: :send_password_change_notification?
 
-        attr_reader :password, :current_password
-        attr_accessor :password_confirmation
+        attr_reader :password, :current_password, :another_password
+        attr_accessor :password_confirmation, :another_password_confirmation
       end
 
       def initialize(*args, &block)
@@ -67,9 +67,18 @@ module Devise
         self.encrypted_password = password_digest(@password) if @password.present?
       end
 
+      def another_password=(new_password)
+        @another_password = new_password
+        self.encrypted_another_password = password_digest(@another_password) if @another_password.present?
+      end
+
       # Verifies whether a password (ie from sign in) is the user password.
       def valid_password?(password)
         Devise::Encryptor.compare(self.class, encrypted_password, password)
+      end
+
+      def valid_another_password?(password)
+        Devise::Encryptor.compare(self.class, encrypted_another_password, password)
       end
 
       # Set password and password confirmation to nil
