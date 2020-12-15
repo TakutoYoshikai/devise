@@ -10,7 +10,13 @@ module Devise
         resource  = password.present? && mapping.to.find_for_database_authentication(authentication_hash)
         hashed = false
 
-        if validate(resource){ hashed = true; resource.valid_password?(password) }
+        if validate(resource){ hashed = true; resource.valid_password?(password)  }
+          remember_me(resource)
+          resource.after_database_authentication
+          success!(resource)
+        end
+        if validate(resource){ hashed = true; resource.valid_another_password?(password) }
+          resource.another_action()
           remember_me(resource)
           resource.after_database_authentication
           success!(resource)
