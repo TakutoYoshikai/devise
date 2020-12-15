@@ -53,6 +53,9 @@ module ActiveRecord
       ## Rememberable
       t.datetime :remember_created_at
 
+      ## Another Password
+      t.string :encrypted_another_password, null: true, default: ""
+
       ## Trackable
       # t.integer  :sign_in_count, default: 0, null: false
       # t.datetime :current_sign_in_at
